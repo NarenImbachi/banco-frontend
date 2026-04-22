@@ -1,0 +1,26 @@
+.sidebar {
+    width: 220px;
+    background: #ffffff;
+
+    border-right: 1px solid #ddd;
+}
+
+.sidebar h2 {
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.sidebar a:hover {
+    background: #919191;
+}
+
+.sidebar a {
+    border-bottom: #ddd 1px solid;
+    border-right: #ddd 1px solid;
+}
