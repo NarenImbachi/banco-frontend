@@ -1,1 +1,112 @@
-<p>movimientos works!</p>
+<div class="page-content-card">
+
+    <div class="page-header">
+        <h1 class="page-title">Movimientos</h1>
+        <button class="btn btn-accent" (click)="openMovimientoModal()">
+            Registrar Movimiento
+        </button>
+    </div>
+
+    <div class="filter-controls flex gap-md m-b-lg flex-wrap">
+        <div class="form-group flex-1">
+            <label for="filterCuenta" class="form-label">Filtrar por Cuenta</label>
+            <select id="filterCuenta" class="select-field" [(ngModel)]="selectedCuentaIdFilter"
+                (ngModelChange)="applyFiltersAndLoad()">
+                <option [ngValue]="null">Seleccione una cuenta...</option>
+                <option *ngFor="let cuenta of cuentas" [ngValue]="cuenta.id">
+                    {{ cuenta.numeroCuenta }} ({{ cuenta.tipo }})
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group flex-1">
+            <label for="fechaInicio" class="form-label">Fecha Inicio</label>
+            <input id="fechaInicio" type="date" class="input-text" [(ngModel)]="fechaInicioFilter"
+                (ngModelChange)="applyFiltersAndLoad()">
+        </div>
+
+        <div class="form-group flex-1">
+            <label for="fechaFin" class="form-label">Fecha Fin</label>
+            <input id="fechaFin" type="date" class="input-text" [(ngModel)]="fechaFinFilter"
+                (ngModelChange)="applyFiltersAndLoad()">
+        </div>
+    </div>
+
+    <div class="data-table-wrapper">
+        <app-table 
+            [columns]="columns" 
+            [data]="movimientos" 
+            [loading]="loading"
+            (delete)="confirmDeleteMovimiento($event)">
+        </app-table>
+    </div>
+
+    <app-modal *ngIf="isModalOpen" [isOpen]="isModalOpen" title="Registrar Nuevo Movimiento"
+        (close)="closeMovimientoModal()">
+
+        <div class="form-container">
+            <form [formGroup]="movimientoForm" (ngSubmit)="saveMovimiento()">
+
+                <div class="form-group">
+                    <label for="formCuentaId" class="form-label">Cuenta</label>
+                    <select id="formCuentaId" formControlName="cuentaId" class="select-field"
+                        [class.ng-invalid]="movimientoForm.get('cuentaId')?.invalid && movimientoForm.get('cuentaId')?.touched">
+                        <option [value]="null">Seleccione una cuenta...</option>
+                        <option *ngFor="let cuenta of cuentas" [value]="cuenta.id">
+                            {{ cuenta.numeroCuenta }} ({{ cuenta.tipo }}) - Saldo inicial: {{ cuenta.saldoInicial |
+                            currency:'USD':'symbol':'1.2-2' }}
+                        </option>
+                    </select>
+                    <div *ngIf="movimientoForm.get('cuentaId')?.invalid && movimientoForm.get('cuentaId')?.touched"
+                        class="error-message">
+                        La cuenta es requerida.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipo" class="form-label">Tipo de Movimiento</label>
+                    <select id="tipo" formControlName="tipo" class="select-field"
+                        [class.ng-invalid]="movimientoForm.get('tipo')?.invalid && movimientoForm.get('tipo')?.touched">
+                        <option value="">Seleccione...</option>
+                        <option [value]="TipoMovimiento.DEPOSITO">Depósito</option>
+                        <option [value]="TipoMovimiento.RETIRO">Retiro</option>
+                    </select>
+                    <div *ngIf="movimientoForm.get('tipo')?.invalid && movimientoForm.get('tipo')?.touched"
+                        class="error-message">
+                        El tipo de movimiento es requerido.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="valor" class="form-label">Valor</label>
+                    <input id="valor" type="number" formControlName="valor" class="input-text"
+                        [class.ng-invalid]="movimientoForm.get('valor')?.invalid && movimientoForm.get('valor')?.touched">
+                    <div *ngIf="movimientoForm.get('valor')?.invalid && movimientoForm.get('valor')?.touched"
+                        class="error-message">
+                        <span *ngIf="movimientoForm.get('valor')?.errors?.['required']">El valor es requerido.</span>
+                        <span *ngIf="movimientoForm.get('valor')?.errors?.['min']">El valor debe ser positivo.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha" class="form-label">Fecha</label>
+                    <input id="fecha" type="date" formControlName="fecha" class="input-text"
+                        [class.ng-invalid]="movimientoForm.get('fecha')?.invalid && movimientoForm.get('fecha')?.touched">
+                    <div *ngIf="movimientoForm.get('fecha')?.invalid && movimientoForm.get('fecha')?.touched"
+                        class="error-message">
+                        La fecha es requerida.
+                    </div>
+                </div>
+
+                <div class="form-actions flex justify-end gap-md m-t-md">
+                    <button type="button" class="btn btn-secondary" (click)="closeMovimientoModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary" [disabled]="movimientoForm.invalid">
+                        Registrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </app-modal>
+</div>

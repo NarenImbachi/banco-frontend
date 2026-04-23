@@ -1,1 +1,42 @@
-<p>table works!</p>
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th *ngFor="let col of columns">
+                    {{ col.header }}
+                </th>
+                <th *ngIf="showActions">Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngIf="loading">
+                <td [attr.colspan]="columns.length + 1" class="loading-message">
+                    Cargando datos...
+                </td>
+            </tr>
+
+            <ng-container *ngIf="!loading && data.length > 0">
+                <tr *ngFor="let row of data">
+                    <td *ngFor="let col of columns">
+                        {{ row[col.field] }}
+                    </td>
+                    <td class="actions-cell" *ngIf="showActions">
+                        <button class="btn btn-primary btn-sm action-btn" (click)="onEdit(row)">
+                            Editar
+                        </button>
+                        <button class="btn btn-danger btn-sm action-btn" (click)="onDelete(row.id)">
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+            </ng-container>
+            
+            <tr *ngIf="!loading && data.length === 0">
+                <td [attr.colspan]="columns.length + 1" class="no-data-message">
+                    No hay datos disponibles.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

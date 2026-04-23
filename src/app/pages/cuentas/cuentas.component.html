@@ -1,1 +1,101 @@
-<p>cuentas works!</p>
+<div class="page-content-card">
+
+    <div class="page-header">
+        <h1 class="page-title">Cuentas</h1>
+        <button class="btn btn-accent" (click)="openAccountModal('create')">
+            Nueva Cuenta
+        </button>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Buscar por número de cuenta, tipo o cliente" class="input-text search-input"
+            [(ngModel)]="searchText" (input)="onSearchChange()" />
+    </div>
+
+    <div class="data-table-wrapper">
+        <app-table [columns]="columns" [data]="cuentasFiltradas" [loading]="loading"
+            (edit)="openAccountModal('edit', $event)" (delete)="confirmDeleteAccount($event)">
+        </app-table>
+    </div>
+
+    <app-modal *ngIf="isModalOpen" [isOpen]="isModalOpen"
+        [title]="currentAccountAction === 'create' ? 'Crear Nueva Cuenta' : 'Editar Cuenta'"
+        (close)="closeAccountModal()">
+
+        <div class="form-container">
+            <form [formGroup]="cuentaForm" (ngSubmit)="saveAccount()">
+
+                <div class="form-group">
+                    <label for="numeroCuenta" class="form-label">Número de Cuenta</label>
+                    <input id="numeroCuenta" type="text" formControlName="numeroCuenta" class="input-text"
+                        [class.ng-invalid]="cuentaForm.get('numeroCuenta')?.invalid && cuentaForm.get('numeroCuenta')?.touched">
+                    <div *ngIf="cuentaForm.get('numeroCuenta')?.invalid && cuentaForm.get('numeroCuenta')?.touched"
+                        class="error-message">
+                        <span *ngIf="cuentaForm.get('numeroCuenta')?.errors?.['required']">El número de cuenta es
+                            requerido.</span>
+                        <span *ngIf="cuentaForm.get('numeroCuenta')?.errors?.['pattern']">Debe tener 6 dígitos
+                            numéricos.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipo" class="form-label">Tipo de Cuenta</label>
+                    <select id="tipo" formControlName="tipo" class="select-field"
+                        [class.ng-invalid]="cuentaForm.get('tipo')?.invalid && cuentaForm.get('tipo')?.touched">
+                        <option value="">Seleccione...</option>
+                        <option [value]="TipoCuenta.AHORRO">Ahorro</option>
+                        <option [value]="TipoCuenta.CORRIENTE">Corriente</option>
+                    </select>
+                    <div *ngIf="cuentaForm.get('tipo')?.invalid && cuentaForm.get('tipo')?.touched"
+                        class="error-message">
+                        El tipo de cuenta es requerido.
+                    </div>
+                </div>
+
+                <ng-container *ngIf="currentAccountAction === 'create'">
+                    <div class="form-group">
+                        <label for="saldoInicial" class="form-label">Saldo Inicial</label>
+                        <input id="saldoInicial" type="number" formControlName="saldoInicial" class="input-text"
+                            [class.ng-invalid]="cuentaForm.get('saldoInicial')?.invalid && cuentaForm.get('saldoInicial')?.touched">
+                        <div *ngIf="cuentaForm.get('saldoInicial')?.invalid && cuentaForm.get('saldoInicial')?.touched"
+                            class="error-message">
+                            <span *ngIf="cuentaForm.get('saldoInicial')?.errors?.['required']">El saldo inicial es
+                                requerido.</span>
+                            <span *ngIf="cuentaForm.get('saldoInicial')?.errors?.['min']">El saldo inicial debe ser
+                                mayor o igual a 0.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clienteId" class="form-label">Cliente</label>
+                        <select id="clienteId" formControlName="clienteId" class="select-field"
+                            [class.ng-invalid]="cuentaForm.get('clienteId')?.invalid && cuentaForm.get('clienteId')?.touched">
+                            <option [value]="null">Seleccione un cliente...</option>
+                            <option *ngFor="let cliente of clientes" [value]="cliente.id">
+                                {{ cliente.nombre }} ({{ cliente.clienteId }})
+                            </option>
+                        </select>
+                        <div *ngIf="cuentaForm.get('clienteId')?.invalid && cuentaForm.get('clienteId')?.touched"
+                            class="error-message">
+                            El cliente es requerido.
+                        </div>
+                    </div>
+                </ng-container>
+
+                <div class="form-group flex align-center">
+                    <input id="estado" type="checkbox" formControlName="estado" class="checkbox-field">
+                    <label for="estado" class="form-label m-l-sm">Activo</label>
+                </div>
+
+                <div class="form-actions flex justify-end gap-md m-t-md">
+                    <button type="button" class="btn btn-secondary" (click)="closeAccountModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary" [disabled]="cuentaForm.invalid">
+                        {{ currentAccountAction === 'create' ? 'Crear' : 'Guardar Cambios' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </app-modal>
+</div>

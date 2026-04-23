@@ -1,1 +1,56 @@
-<p>reportes works!</p>
+<div class="page-content-card">
+
+    <div class="page-header">
+        <h1 class="page-title">Reporte Estado de Cuenta</h1>
+        <div class="flex gap-md">
+            <button class="btn btn-primary" (click)="generarReporte()">
+                Generar Reporte
+            </button>
+            <button class="btn btn-accent" (click)="generarPDF()">
+                Generar PDF
+            </button>
+        </div>
+    </div>
+
+    <div class="filter-controls flex gap-md m-b-lg flex-wrap">
+
+        <div class="form-group flex-1">
+            <label class="form-label">
+                Cliente
+            </label>
+
+            <select class="select-field" [(ngModel)]="clienteId">
+                <option [ngValue]="null">
+                    Seleccione un cliente...
+                </option>
+                <option *ngFor="let c of clientes" [value]="c.id">
+                    {{ c.nombre }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group flex-1">
+            <label class="form-label">
+                Fecha Inicio
+            </label>
+            <input type="date" class="input-text" [(ngModel)]="fechaInicio">
+        </div>
+
+        <div class="form-group flex-1">
+            <label class="form-label">
+                Fecha Fin
+            </label>
+            <input type="date" class="input-text" [(ngModel)]="fechaFin">
+        </div>
+    </div>
+
+    <div class="data-table-wrapper">
+        <app-table 
+        [columns]="columns" 
+        [data]="reporte" 
+        [loading]="loading"
+        [showActions]="false">
+        </app-table>
+    </div>
+
+</div>

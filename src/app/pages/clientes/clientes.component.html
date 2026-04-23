@@ -1,1 +1,142 @@
-<p>clientes works!</p>
+<div class="page-content-card">
+
+    <div class="page-header">
+        <h1 class="page-title">Clientes</h1>
+        <button class="btn btn-accent" (click)="openClientModal('create')">
+            Nuevo Cliente
+        </button>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Buscar" class="input-text search-input" [(ngModel)]="searchText"
+            (input)="onSearchChange()" />
+    </div>
+
+    <div class="data-table-wrapper">
+        <app-table [columns]="columns" [data]="clientesFiltrados" [loading]="loading"
+            (edit)="openClientModal('edit', $event)" (delete)="confirmDeleteClient($event)">
+        </app-table>
+    </div>
+
+    <app-modal *ngIf="isModalOpen" [isOpen]="isModalOpen"
+        [title]="currentClientAction === 'create' ? 'Crear Nuevo Cliente' : 'Editar Cliente'"
+        (close)="closeClientModal()">
+
+        <div class="form-container">
+            <form [formGroup]="clientForm" (ngSubmit)="saveClient()">
+                <div class="form-group">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input id="nombre" type="text" formControlName="nombre" class="input-text"
+                        [class.ng-invalid]="clientForm.get('nombre')?.invalid && clientForm.get('nombre')?.touched">
+                    <div *ngIf="clientForm.get('nombre')?.invalid && clientForm.get('nombre')?.touched"
+                        class="error-message">
+                        <span *ngIf="clientForm.get('nombre')?.errors?.['required']">El nombre es requerido.</span>
+                        <span *ngIf="clientForm.get('nombre')?.errors?.['minlength']">Debe tener al menos 3
+                            caracteres.</span>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="currentClientAction === 'create'">
+                    <div class="form-group">
+                        <label for="genero" class="form-label">Género</label>
+                        <select id="genero" formControlName="genero" class="select-field"
+                            [class.ng-invalid]="clientForm.get('genero')?.invalid && clientForm.get('genero')?.touched">
+                            <option value="">Seleccione...</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>
+                        <div *ngIf="clientForm.get('genero')?.invalid && clientForm.get('genero')?.touched"
+                            class="error-message">
+                            El género es requerido.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edad" class="form-label">Edad</label>
+                        <input id="edad" type="number" formControlName="edad" class="input-text"
+                            [class.ng-invalid]="clientForm.get('edad')?.invalid && clientForm.get('edad')?.touched">
+                        <div *ngIf="clientForm.get('edad')?.invalid && clientForm.get('edad')?.touched"
+                            class="error-message">
+                            <span *ngIf="clientForm.get('edad')?.errors?.['required']">La edad es requerida.</span>
+                            <span
+                                *ngIf="clientForm.get('edad')?.errors?.['min'] || clientForm.get('edad')?.errors?.['max']">Debe
+                                ser entre 18 y 99 años.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="identificacion" class="form-label">Identificación</label>
+                        <input id="identificacion" type="text" formControlName="identificacion" class="input-text"
+                            [class.ng-invalid]="clientForm.get('identificacion')?.invalid && clientForm.get('identificacion')?.touched">
+                        <div *ngIf="clientForm.get('identificacion')?.invalid && clientForm.get('identificacion')?.touched"
+                            class="error-message">
+                            <span *ngIf="clientForm.get('identificacion')?.errors?.['required']">La identificación es
+                                requerida.</span>
+                            <span *ngIf="clientForm.get('identificacion')?.errors?.['pattern']">Debe tener 10 dígitos
+                                numéricos.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clienteId" class="form-label">Cliente ID</label>
+                        <input id="clienteId" type="text" formControlName="clienteId" class="input-text"
+                            [class.ng-invalid]="clientForm.get('clienteId')?.invalid && clientForm.get('clienteId')?.touched">
+                        <div *ngIf="clientForm.get('clienteId')?.invalid && clientForm.get('clienteId')?.touched"
+                            class="error-message">
+                            El ID de Cliente es requerido.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contrasena" class="form-label">Contraseña</label>
+                        <input id="contrasena" type="password" formControlName="contrasena" class="input-text"
+                            [class.ng-invalid]="clientForm.get('contrasena')?.invalid && clientForm.get('contrasena')?.touched">
+                        <div *ngIf="clientForm.get('contrasena')?.invalid && clientForm.get('contrasena')?.touched"
+                            class="error-message">
+                            <span *ngIf="clientForm.get('contrasena')?.errors?.['required']">La contraseña es
+                                requerida.</span>
+                            <span *ngIf="clientForm.get('contrasena')?.errors?.['minlength']">Debe tener al menos 4
+                                caracteres.</span>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <div class="form-group">
+                    <label for="direccion" class="form-label">Dirección</label>
+                    <input id="direccion" type="text" formControlName="direccion" class="input-text"
+                        [class.ng-invalid]="clientForm.get('direccion')?.invalid && clientForm.get('direccion')?.touched">
+                    <div *ngIf="clientForm.get('direccion')?.invalid && clientForm.get('direccion')?.touched"
+                        class="error-message">
+                        La dirección es requerida.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono" class="form-label">Teléfono</label>
+                    <input id="telefono" type="text" formControlName="telefono" class="input-text"
+                        [class.ng-invalid]="clientForm.get('telefono')?.invalid && clientForm.get('telefono')?.touched">
+                    <div *ngIf="clientForm.get('telefono')?.invalid && clientForm.get('telefono')?.touched"
+                        class="error-message">
+                        <span *ngIf="clientForm.get('telefono')?.errors?.['required']">El teléfono es requerido.</span>
+                        <span *ngIf="clientForm.get('telefono')?.errors?.['pattern']">Debe tener 10 dígitos
+                            numéricos.</span>
+                    </div>
+                </div>
+
+                <div class="form-group flex align-center"> 
+                    <input id="estado" type="checkbox" formControlName="estado" class="checkbox-field">
+                    <label for="estado" class="form-label m-l-sm">Activo</label>
+                </div>
+
+                <div class="form-actions flex justify-end gap-md m-t-md">
+                    <button type="button" class="btn btn-secondary" (click)="closeClientModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary" [disabled]="clientForm.invalid">
+                        {{ currentClientAction === 'create' ? 'Crear' : 'Guardar Cambios' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </app-modal>
+</div>

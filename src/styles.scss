@@ -1,1 +1,234 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Base de Reseteo (simple y limpio) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: var(--color-text-primary);
+    background-color: var(--color-background-app);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Variables CSS para paleta de colores y tamaños (adaptadas a la imagen) */
+:root {
+    --color-primary: #004d9e;
+    --color-primary-dark: #003366;
+    --color-primary-light: #e6f0fa;
+
+    --color-accent: #ffc107;
+    --color-accent-dark: #e0a800;
+
+    --color-grey-50: #ffffff;
+    --color-grey-100: #f8f9fa;
+    --color-grey-200: #e9ecef;
+    --color-grey-300: #dee2e6;
+    --color-grey-400: #ced4da;
+    --color-grey-500: #adb5bd;
+    --color-grey-600: #6c757d;
+    --color-grey-700: #495057;
+    --color-grey-800: #343a40;
+
+    /* Colores de estado */
+    --color-success: #28a745;
+    --color-error: #dc3545;
+    --color-warning: #ffc107;
+
+    /* Colores de texto */
+    --color-text-primary: var(--color-grey-800);
+    --color-text-secondary: var(--color-grey-600);
+    --color-text-light: #fff;
+
+    /* Colores de fondo */
+    --color-background-app: var(--color-grey-100);
+    /* Fondo general de la aplicación */
+    --color-background-card: var(--color-grey-50);
+    /* Fondo para tarjetas/secciones con contenido */
+
+    /* Sombras */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    /* Sombra muy suave para elementos flotantes */
+    --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+    /* Espaciado */
+    --spacing-xs: 0.25rem;
+    /* 4px */
+    --spacing-sm: 0.5rem;
+    /* 8px */
+    --spacing-md: 1rem;
+    /* 16px */
+    --spacing-lg: 1.5rem;
+    /* 24px */
+    --spacing-xl: 2rem;
+    /* 32px */
+
+    /* Bordes */
+    --border-radius-sm: 0.25rem;
+    /* 4px */
+    --border-radius-md: 0.5rem;
+    /* 8px */
+    --border-color-light: var(--color-grey-200);
+    --border-color-medium: var(--color-grey-300);
+
+    /* Z-index */
+    --z-index-modal-backdrop: 900;
+    --z-index-modal: 1000;
+}
+
+/* Estilos de botones generales */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+    white-space: nowrap;
+    /* Evita que el texto se divida */
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+
+    &:hover {
+        background-color: var(--color-primary-dark);
+    }
+}
+
+.btn-accent {
+    /* Para el botón "Nuevo" */
+    background-color: var(--color-accent);
+    color: var(--color-text-primary);
+
+    /* Texto oscuro para contraste en amarillo */
+    &:hover {
+        background-color: var(--color-accent-dark);
+    }
+}
+
+.btn-secondary {
+    background-color: var(--color-grey-200);
+    color: var(--color-text-primary);
+    border-color: var(--color-grey-300);
+
+    &:hover {
+        background-color: var(--color-grey-300);
+    }
+}
+
+.btn-danger {
+    background-color: var(--color-error);
+    color: var(--color-text-light);
+}
+
+.btn-sm {
+    /* Botones pequeños para acciones de tabla */
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+/* Estilos de input generales */
+.input-text,
+.select-field {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--border-color-medium);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.9rem;
+    color: var(--color-text-primary);
+    background-color: var(--color-background-card);
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+    &:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 0.15rem rgba(var(--color-primary), 0.25);
+    }
+
+    /* Clases de validación de Angular */
+    &.ng-invalid.ng-touched {
+        border-color: var(--color-error);
+    }
+}
+
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.error-message {
+    color: var(--color-error);
+    font-size: 0.8rem;
+    margin-top: var(--spacing-xs);
+}
+
+/* Clases de utilidad */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.m-t-md {
+    margin-top: var(--spacing-md);
+}
+
+.m-b-md {
+    margin-bottom: var(--spacing-md);
+}
+
+.p-md {
+    padding: var(--spacing-md);
+}
+
+.flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.gap-md {
+    gap: var(--spacing-md);
+}
+
+.m-l-sm {
+    margin-left: var(--spacing-sm);
+}
