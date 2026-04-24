@@ -16,6 +16,7 @@ export class TableComponent {
   @Input() data: any[] = [];
   @Input() loading = false;
   @Input() showActions = true;
+  @Input() actionButtons: { edit?: boolean, delete?: boolean } = { edit: true, delete: true };
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<number>();
 

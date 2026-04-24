@@ -37,6 +37,7 @@
             [columns]="columns" 
             [data]="movimientos" 
             [loading]="loading"
+            [actionButtons]="{ edit: false, delete: true }"
             (delete)="confirmDeleteMovimiento($event)">
         </app-table>
     </div>

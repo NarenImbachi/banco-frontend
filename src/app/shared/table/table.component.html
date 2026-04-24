@@ -22,10 +22,10 @@
                         {{ row[col.field] }}
                     </td>
                     <td class="actions-cell" *ngIf="showActions">
-                        <button class="btn btn-primary btn-sm action-btn" (click)="onEdit(row)">
+                        <button class="btn btn-primary btn-sm action-btn" *ngIf="actionButtons.edit" (click)="onEdit(row)">
                             Editar
                         </button>
-                        <button class="btn btn-danger btn-sm action-btn" (click)="onDelete(row.id)">
+                        <button class="btn btn-danger btn-sm action-btn" *ngIf="actionButtons.delete" (click)="onDelete(row.id)">
                             Eliminar
                         </button>
                     </td>
