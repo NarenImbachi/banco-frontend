@@ -40,7 +40,6 @@ export class MovimientoService {
         if (!response.success) {
           throw new Error(response.message || 'Error al eliminar el movimiento');
         }
-        // No hay 'data' en un delete exitoso, solo el éxito de la operación
         return;
       })
     );

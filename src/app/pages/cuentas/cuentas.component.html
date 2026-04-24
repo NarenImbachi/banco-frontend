@@ -72,7 +72,7 @@
                             [class.ng-invalid]="cuentaForm.get('clienteId')?.invalid && cuentaForm.get('clienteId')?.touched">
                             <option [value]="null">Seleccione un cliente...</option>
                             <option *ngFor="let cliente of clientes" [value]="cliente.id">
-                                {{ cliente.nombre }} ({{ cliente.clienteId }})
+                                {{ cliente.nombre }}
                             </option>
                         </select>
                         <div *ngIf="cuentaForm.get('clienteId')?.invalid && cuentaForm.get('clienteId')?.touched"
